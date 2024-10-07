@@ -31,7 +31,6 @@ public class MyRectangle {
     {
         return (topleft.getX() + topleft.getY() + bottomright.getX() + bottomright.getY());
     }
-    
     public String toString()
     {
         return ("MyRectangle[topleft=(" + this.topleft + "),bottomright=(" + this.bottomright + ")]");
