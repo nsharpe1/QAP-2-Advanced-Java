@@ -4,8 +4,8 @@ public class Money {
 
     public Money(double amount)
     {
-        this.dollars = dollars;
-        this.cents = cents;
+        this.dollars = (long)amount;
+        this.cents = Math.round(((amount - this.dollars) * 100));
     }
     public Money(Money otherObject)
     {
@@ -21,27 +21,30 @@ public class Money {
     }
     public Money subtract(Money otherObject)
     {
-        long totalCents = this.cents - otherObject.cents;
-        long totalDollars = this.dollars - otherObject.dollars - totalCents/100;
+        double totalCents = this.cents + this.dollars * 100 - (otherObject.cents + otherObject.dollars * 100);
+        double totalDollars = totalCents/100;
         totalCents %= 100;
-        return new Money(totalCents - totalDollars/100);
+        if(totalCents <0){
+            totalDollars--;
+            totalCents+=100;
+        }
+        return new Money(totalDollars + totalCents/100.0);
     }
     public int compareTo(Money otherObject)
     {
         if(this.dollars == otherObject.dollars && this.cents == otherObject.cents){
             System.out.println("The two are equal");
-            return 1;
+            return 3;
         }
         if(this.dollars != otherObject.dollars && this.cents != otherObject.cents){
             System.out.println("The two values are not equal");
-            return 1;
+            return 2;
         }
         if(this.dollars > otherObject.dollars && this.cents > otherObject.cents){
             System.out.println("Currrent object is greater!");
-            return 1;
+            return 0;
         }
-        if(this.dollars < otherObject.dollars && this.cents < otherObject.cents){
-            System.out.println("Current object is lesser!");
+        if(this.dollars <= otherObject.dollars && this.cents <= otherObject.cents){
             return 1;
         }
         return 0;
@@ -53,10 +56,8 @@ public class Money {
             return true;
         }
         return false;
-
     }
     public String toString() {
-        return "Money [dollars=" + dollars + ", cents=" + cents + "]";
+        return String.format("$%d.%02d", dollars, cents);
     }
-    
 }

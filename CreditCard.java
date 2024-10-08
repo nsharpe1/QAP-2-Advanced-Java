@@ -4,11 +4,12 @@ public class CreditCard {
     private Person owner;
 
     public CreditCard(Money creditLimit, Person owner) {
-        this.creditLimit = creditLimit;
+        this.creditLimit = new Money(creditLimit);
+        this.Balance = new Money(0);
         this.owner = owner;
     }
     public void setBalance(Money balance) {
-        Balance = balance;
+        this.Balance = balance;
     }
     public void setCreditLimit(Money creditLimit) {
         this.creditLimit = creditLimit;
@@ -20,11 +21,11 @@ public class CreditCard {
         this.owner = owner;
     }
     public Money getBalance() {
-        return Balance;
+        return new Money (this.Balance);
     }
     public Money getCreditLimit()
     {
-        return creditLimit;
+        return new Money(this.creditLimit);
     }
     public String getPersonals()
     {
@@ -32,12 +33,15 @@ public class CreditCard {
     }
     public void charge(Money amount)
     {
-        this.creditLimit.subtract(amount);
-        this.Balance.add(amount);
+        if(Balance.add(amount).compareTo(creditLimit)==1){
+            Money newBalance = this.Balance.add(amount);
+            this.Balance = newBalance;
+        } else{
+            System.out.println("Exceeds credit limit");
+        }   
     }
     public void payment(Money amount)
     {
-        this.creditLimit.add(amount);
-        this.Balance.subtract(amount);
+       this.Balance = this.Balance.subtract(amount);
     }   
 }
